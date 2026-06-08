@@ -150,6 +150,12 @@ def main():
             sk_model=model,
             artifact_path="random_forest_model",
             registered_model_name="AdultIncome-CI-RandomForest",
+            pip_requirements=[
+                "mlflow==2.19.0",
+                "scikit-learn",
+                "pandas",
+                "numpy"
+            ]
         )
 
         print(f"\n[RESULTS]")

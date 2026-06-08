@@ -157,7 +157,7 @@ jobs:
           conda run mlflow models build-docker \
             --model-uri "${{ env.MODEL_URI }}" \
             --name "${IMAGE_NAME}" \
-            --enable-mlserver
+            --env-manager local
 
           echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
           echo "IMAGE_SHA=${IMAGE_SHA}" >> $GITHUB_ENV
