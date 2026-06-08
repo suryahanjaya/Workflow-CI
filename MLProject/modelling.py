@@ -133,33 +133,7 @@ def main():
         rec  = recall_score(y_test, y_pred, average="binary")
         f1   = f1_score(y_test, y_pred, average="binary")
 
-        # Log additional metadata and test metrics manually (autolog handles RF params and the model automatically)
-        mlflow.log_param("test_size",    TEST_SIZE)
-        mlflow.log_param("n_features",   X_train.shape[1])
-        mlflow.log_param("train_rows",   X_train.shape[0])
-        mlflow.log_param("test_rows",    X_test.shape[0])
-
-        mlflow.log_metric("accuracy",  acc)
-        mlflow.log_metric("precision", prec)
-        mlflow.log_metric("recall",    rec)
-        mlflow.log_metric("f1_score",  f1)
-
-        # Artifacts
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            cm_path = plot_confusion_matrix(y_test, y_pred, tmp_dir)
-            mlflow.log_artifact(cm_path, "plots")
-
-            fi_path = plot_feature_importance(model, feature_names, tmp_dir)
-            mlflow.log_artifact(fi_path, "plots")
-
-            report = classification_report(
-                y_test, y_pred,
-                target_names=["<=50K", ">50K"], digits=4
-            )
-            report_path = os.path.join(tmp_dir, "classification_report.txt")
-            with open(report_path, "w") as f:
-                f.write(report)
-            mlflow.log_artifact(report_path, "reports")
+        # Autolog is active, logging parameters and model automatically. No manual logging calls.
 
         print(f"\n[RESULTS]")
         print(f"  Accuracy  : {acc:.4f}")
