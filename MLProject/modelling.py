@@ -5,8 +5,22 @@ Designed to be run via: mlflow run MLProject/
 Author: Surya Hanjaya
 """
 
-import os
 import sys
+import types
+from unittest.mock import MagicMock
+
+# Mock torch to prevent DLL loading errors on Windows
+dummy_torch = types.ModuleType("torch")
+class DummyTensor:
+    pass
+dummy_torch.Tensor = DummyTensor
+sys.modules["torch"] = dummy_torch
+
+# Mock sklearn.frozen to prevent import errors in corrupted sklearn installations
+sys.modules['sklearn.frozen'] = MagicMock()
+sys.modules['sklearn.frozen._frozen'] = MagicMock()
+
+import os
 import pandas as pd
 import numpy as np
 import matplotlib
