@@ -106,6 +106,9 @@ def main():
     }
     print(f"[INFO] Params: {params}")
 
+    # Enable MLflow Autologging
+    mlflow.sklearn.autolog()
+
     with mlflow.start_run():
         model = RandomForestClassifier(**params)
         model.fit(X_train, y_train)
@@ -116,9 +119,7 @@ def main():
         rec  = recall_score(y_test, y_pred, average="binary")
         f1   = f1_score(y_test, y_pred, average="binary")
 
-        # Manual MLflow logging
-        for k, v in params.items():
-            mlflow.log_param(k, str(v))
+        # Log additional metadata and test metrics manually (autolog handles RF params and the model automatically)
         mlflow.log_param("test_size",    TEST_SIZE)
         mlflow.log_param("n_features",   X_train.shape[1])
         mlflow.log_param("train_rows",   X_train.shape[0])
@@ -145,18 +146,6 @@ def main():
             with open(report_path, "w") as f:
                 f.write(report)
             mlflow.log_artifact(report_path, "reports")
-
-        mlflow.sklearn.log_model(
-            sk_model=model,
-            artifact_path="random_forest_model",
-            registered_model_name="AdultIncome-CI-RandomForest",
-            pip_requirements=[
-                "mlflow==2.19.0",
-                "scikit-learn",
-                "pandas",
-                "numpy"
-            ]
-        )
 
         print(f"\n[RESULTS]")
         print(f"  Accuracy  : {acc:.4f}")

@@ -138,7 +138,7 @@ jobs:
           exp = client.get_experiment_by_name('adult-income-ci')
           runs = client.search_runs([exp.experiment_id], order_by=['start_time DESC'], max_results=1)
           run_id = runs[0].info.run_id
-          print(f'runs:/{run_id}/random_forest_model')
+          print(f'runs:/{run_id}/model')
           ")
           echo "MODEL_URI=${MODEL_URI}" >> $GITHUB_ENV
           echo "[INFO] Model URI: ${MODEL_URI}"
