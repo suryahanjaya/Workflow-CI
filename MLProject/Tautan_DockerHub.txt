@@ -1,0 +1,11 @@
+Docker Hub Repository: https://hub.docker.com/r/suryahanjaya/adult-income-classifier
+
+Image Tags:
+  - suryahanjaya/adult-income-classifier:latest
+  - suryahanjaya/adult-income-classifier:<git-commit-sha>
+
+Pull Command:
+  docker pull suryahanjaya/adult-income-classifier:latest
+
+Run Command:
+  docker run -p 8080:8080 suryahanjaya/adult-income-classifier:latest

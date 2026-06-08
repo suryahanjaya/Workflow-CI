@@ -1,0 +1,30 @@
+name: adult-income-classifier
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+      data_path:
+        type: str
+        default: "adult_income_preprocessed.csv"
+      n_estimators:
+        type: int
+        default: 100
+      max_depth:
+        type: str
+        default: "None"
+      min_samples_split:
+        type: int
+        default: 2
+      min_samples_leaf:
+        type: int
+        default: 1
+      test_size:
+        type: float
+        default: 0.2
+      random_state:
+        type: int
+        default: 42
+    command: >
+      python modelling.py
