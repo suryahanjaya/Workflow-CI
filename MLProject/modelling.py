@@ -9,6 +9,10 @@ import sys
 import types
 from unittest.mock import MagicMock
 
+# Reconfigure stdout to use UTF-8 to prevent UnicodeEncodeError from MLflow emojis on Windows
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
+
 # Mock torch to prevent DLL loading errors on Windows
 dummy_torch = types.ModuleType("torch")
 class DummyTensor:
