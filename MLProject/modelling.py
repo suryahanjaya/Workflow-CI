@@ -1,6 +1,6 @@
 """
 modelling.py (Kriteria 3 — MLflow Project entry point)
-Training Random Forest with manual MLflow logging.
+Training Random Forest using MLflow autolog().
 Designed to be run via: mlflow run MLProject/
 Author: Surya Hanjaya
 """
@@ -22,14 +22,6 @@ sys.modules['sklearn.frozen._frozen'] = MagicMock()
 
 import os
 import pandas as pd
-import numpy as np
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import seaborn as sns
-import tempfile
-import json
-
 import mlflow
 import mlflow.sklearn
 
@@ -40,8 +32,6 @@ from sklearn.metrics import (
     precision_score,
     recall_score,
     f1_score,
-    confusion_matrix,
-    classification_report,
 )
 
 import warnings
@@ -58,43 +48,6 @@ MIN_SPLIT    = int(os.environ.get("MIN_SAMPLES_SPLIT", 2))
 MIN_LEAF     = int(os.environ.get("MIN_SAMPLES_LEAF",  1))
 TEST_SIZE    = float(os.environ.get("TEST_SIZE", 0.2))
 RANDOM_STATE = int(os.environ.get("RANDOM_STATE", 42))
-
-
-def plot_confusion_matrix(y_true, y_pred, save_dir):
-    cm = confusion_matrix(y_true, y_pred)
-    fig, ax = plt.subplots(figsize=(6, 5))
-    sns.heatmap(
-        cm, annot=True, fmt="d", cmap="Blues",
-        xticklabels=["<=50K", ">50K"],
-        yticklabels=["<=50K", ">50K"], ax=ax,
-    )
-    ax.set_title("Confusion Matrix", fontsize=13, fontweight="bold")
-    ax.set_xlabel("Predicted")
-    ax.set_ylabel("Actual")
-    plt.tight_layout()
-    path = os.path.join(save_dir, "confusion_matrix.png")
-    fig.savefig(path, dpi=150, bbox_inches="tight")
-    plt.close(fig)
-    return path
-
-
-def plot_feature_importance(model, feature_names, save_dir, top_n=20):
-    importances = model.feature_importances_
-    indices = np.argsort(importances)[::-1][:top_n]
-    top_features = [feature_names[i] for i in indices]
-    top_importances = importances[indices]
-    fig, ax = plt.subplots(figsize=(10, 7))
-    ax.barh(range(top_n), top_importances[::-1], edgecolor="black", linewidth=0.5)
-    ax.set_yticks(range(top_n))
-    ax.set_yticklabels(top_features[::-1], fontsize=9)
-    ax.set_xlabel("Feature Importance")
-    ax.set_title(f"Top {top_n} Feature Importances", fontsize=13, fontweight="bold")
-    ax.grid(axis="x", alpha=0.3)
-    plt.tight_layout()
-    path = os.path.join(save_dir, "feature_importance.png")
-    fig.savefig(path, dpi=150, bbox_inches="tight")
-    plt.close(fig)
-    return path
 
 
 def main():
